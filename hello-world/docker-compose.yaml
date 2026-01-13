@@ -1,0 +1,22 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  producer:
+    build: ./producer
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+
+  consumer:
+    build: ./consumer
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_HOST=rabbitmq
