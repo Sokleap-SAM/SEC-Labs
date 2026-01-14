@@ -24,7 +24,7 @@ services:
 
   consumer:
     build: ./consumer
-    restart: on-failure
+    command: sh -c "java -cp app.jar Recv & tail -f /dev/null"
     depends_on:
       - rabbitmq
     networks:
