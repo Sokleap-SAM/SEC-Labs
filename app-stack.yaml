@@ -1,0 +1,34 @@
+# 1. THE DEPLOYMENT (Manages the Pods)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-web-site
+  template:
+    metadata:
+      labels:
+        app: my-web-site
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+---
+# 2. THE SERVICE & LOAD BALANCER (The Access Point)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-lb
+spec:
+  type: LoadBalancer
+  selector:
+    app: my-web-site  # This must match the label in the Deployment above!
+  ports:
+    - protocol: TCP
+      port: 80        # The port the Load Balancer listens on
+      targetPort: 80  # The port the Pod is listening on
